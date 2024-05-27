@@ -1,8 +1,9 @@
 import React from "react";
-import { Product } from "../context/ProductContext";
+import { Product } from "../types/product";
 import ProductAttributes from "./ProductAttributes";
 import increaseIcon from "../assets/plus-square.svg";
 import decreaseIcon from "../assets/minus-square.svg";
+import Image from "./Image";
 
 interface CartItemProps {
   id: string;
@@ -28,43 +29,56 @@ class CartItem extends React.Component<CartItemProps> {
     } = this.props;
 
     return (
-      <div className="w-full flex items-center justify-between py-2 gap-8 h-full">
-        <div>
-          <h3 className="truncate">{name}</h3>
-          <p>Price: ${price}</p>
-          <ProductAttributes
-            attributes={attributes}
-            selectedAttributes={selectedAttributesItems}
-            inCart={true}
-          />
+      <div className="flex justify-between py-4 gap-4 border-b-2 items-center">
+        <div className="flex flex-col gap-2">
+          <h3 className="truncate text-xl">{name}</h3>
+          <p className="text-xl font-bold">${price}</p>
+          <div className="flex gap-1 px-2">
+            <ProductAttributes
+              attributes={attributes}
+              selectedAttributes={selectedAttributesItems}
+              inCart={true}
+            />
+          </div>
         </div>
-        <div className="flex gap-4 h-full w-full items-center justify-end">
-          <div className="h-full flex flex-col justify-between">
+
+        <div className="flex gap-2 h-full w-full min-h-[150px] min-w-[100px] justify-end">
+          <div className="flex flex-col justify-between h-[150px] w-[20px]">
             <button
               aria-label="Increase quantity"
-              className="bg-white hover:bg-gray-100 cursor-pointer w-5 h-5"
+              className="bg-white hover:bg-gray-100 cursor-pointer w-5 h-5 justify-self-start"
               onClick={() => this.props.addItemQuantity(this.props.id)}
             >
-              <img
+              <Image
                 src={increaseIcon}
+                width={20}
+                height={20}
                 alt="increase"
-                className="w-full h-full object-cover"
+                objectFit="cover"
               />
             </button>
             <p className="text-center py-4">{quantity}</p>
             <button
               aria-label="Decrease quantity"
-              className="bg-white hover:bg-gray-100 cursor-pointer w-5 h-5"
+              className="bg-white hover:bg-gray-100 cursor-pointer w-5 h-5 justify-self-end"
               onClick={() => this.props.removeItemQuantity(this.props.id)}
             >
-              <img
+              <Image
                 src={decreaseIcon}
+                width={20}
+                height={20}
                 alt="decrease"
-                className="w-full h-full object-cover"
+                objectFit="cover"
               />
             </button>
           </div>
-          <img src={image} alt={name} className="object-contain h-40 w-24" />
+          <Image
+            src={image}
+            alt={name}
+            objectFit="contain"
+            width={100}
+            height={150}
+          />
         </div>
       </div>
     );

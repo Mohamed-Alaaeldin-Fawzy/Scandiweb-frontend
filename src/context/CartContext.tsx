@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "./ProductContext";
+import { Product } from "../types/product";
 import { createOrder } from "../graphql/mutation";
 
 export interface CartItem {
@@ -20,6 +20,7 @@ export interface CartContextType {
   toggleIsCartOpened: () => void;
   checkout: () => void;
   errors: string[];
+  showCheckoutModal: boolean;
 }
 
 const storedCartItems = sessionStorage.getItem("cartItems");
@@ -40,18 +41,25 @@ const initialContextValue: CartContextType = {
   removeItemQuantity: () => {},
   checkout: () => {},
   errors: [],
+  showCheckoutModal: false,
 };
 
 const CartContext = React.createContext(initialContextValue);
 
 class CartProvider extends React.Component<
   { children: React.ReactNode },
-  { cartItems: CartItem[]; isCartOpened: boolean; errors?: string[] }
+  {
+    cartItems: CartItem[];
+    isCartOpened: boolean;
+    errors?: string[];
+    showCheckoutModal: boolean;
+  }
 > {
   state = {
     cartItems: initialCartItems as CartItem[],
     isCartOpened: false,
     errors: [],
+    showCheckoutModal: false,
   };
 
   updateSessionStorage = (): void => {
@@ -148,6 +156,7 @@ class CartProvider extends React.Component<
       return;
     }
 
+    this.setState({ ...this.state, showCheckoutModal: true });
     this.emptyCart();
   };
 
@@ -171,6 +180,7 @@ class CartProvider extends React.Component<
           removeItemQuantity: this.removeItemQuantity,
           checkout: this.checkout,
           errors: this.state.errors,
+          showCheckoutModal: this.state.showCheckoutModal,
         }}
       >
         {children}

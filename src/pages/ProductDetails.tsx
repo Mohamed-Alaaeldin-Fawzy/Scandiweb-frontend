@@ -1,17 +1,15 @@
 import { Component } from "react";
 import { RouteProps, useParams } from "react-router-dom";
-import {
-  ProductContext,
-  Product,
-  ProductContextType,
-} from "../context/ProductContext";
-import ProductAttributes from "./ProductAttributes";
-import ProductImages from "./ProductImage";
-import { ProductViewer } from "./ProductViewer";
+import ProductAttributes from "../components/ProductAttributes";
+import ProductImages from "../components/ProductImage";
+import { ProductViewer } from "../components/ProductViewer";
 import { parseHtml } from "../utils/htmlParser";
-import ProductDescription from "./ProductDescription";
+import ProductDescription from "../components/ProductDescription";
 import Loading from "../assets/loading.png";
 import { CartContext, CartContextType } from "../context/CartContext";
+import Image from "../components/Image";
+import { getProductById } from "../graphql/query";
+import { Product } from "../types/product";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -23,20 +21,40 @@ interface StateType {
   product: Product;
   selectedAttributes: { [key: string]: string };
   isButtonDisabled: boolean;
+  isLoading: boolean;
 }
 
 class ProductDetails extends Component<RouteProps, StateType> {
-  static contextType = ProductContext;
-
-  constructor(props: RouteProps) {
-    super(props);
-  }
-  state = {
+  state: StateType = {
     imageUrl: "",
     product: {} as Product,
     selectedAttributes: {} as { [key: string]: string },
     isButtonDisabled: true,
+    isLoading: true,
   };
+
+  componentDidMount() {
+    const { id } = this.props;
+    const fetchProductById = async (id: string) => {
+      const product = await getProductById(id);
+      this.setState((prevState) => {
+        return {
+          ...prevState,
+          product,
+          isLoading: false,
+          imageUrl: product?.gallery[0]?.imageUrl,
+          isButtonDisabled: !product.inStock
+            ? true
+            : product.attributes.length > 0
+            ? true
+            : false,
+        };
+      });
+    };
+
+    if (!id) return;
+    fetchProductById(id);
+  }
 
   handleAttributeSelect = (attributeId: string, itemId: string) => {
     this.setState((prevState) => {
@@ -92,55 +110,6 @@ class ProductDetails extends Component<RouteProps, StateType> {
       });
     }
   };
-
-  componentDidMount() {
-    const { id } = this.props;
-    const { products } = this.context as ProductContextType;
-    const productItem: Product | undefined = products.find((p) => p.id === id);
-    if (productItem) {
-      this.setState({
-        product: productItem,
-        imageUrl: productItem!.gallery[0].imageUrl,
-        isButtonDisabled: !productItem.inStock,
-      });
-      if (!productItem.inStock) {
-        this.setState({ isButtonDisabled: true });
-        return;
-      }
-      if (productItem.attributes.length === 0) {
-        this.setState({ isButtonDisabled: false });
-        return;
-      }
-    }
-  }
-
-  componentDidUpdate(_prevProps: RouteProps, prevState: StateType) {
-    const { id } = this.props;
-
-    if (prevState.product.id !== id) {
-      const { products } = this.context as ProductContextType;
-
-      const productItem: Product | undefined = products.find(
-        (p) => p.id === id
-      );
-      if (productItem) {
-        this.setState({
-          product: productItem,
-          imageUrl: productItem!.gallery[0].imageUrl,
-          isButtonDisabled: true,
-          selectedAttributes: {},
-        });
-        if (!productItem.inStock) {
-          this.setState({ isButtonDisabled: true });
-          return;
-        }
-        if (productItem.attributes.length === 0) {
-          this.setState({ isButtonDisabled: false });
-          return;
-        }
-      }
-    }
-  }
 
   render() {
     const { product, imageUrl } = this.state;
@@ -209,8 +178,10 @@ class ProductDetails extends Component<RouteProps, StateType> {
       </CartContext.Consumer>
     ) : (
       <div className="container items-center h-screen flex justify-center mx-auto p-2">
-        <img
-          className="w-40 h-40 object-contain self-center animate-spin"
+        <Image
+          width={60}
+          height={60}
+          className="self-center animate-spin"
           src={Loading}
           alt="loading"
         />

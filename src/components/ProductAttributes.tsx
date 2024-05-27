@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Product } from "../context/ProductContext";
+import { Product } from "../types/product";
 
 export default class ProductAttributes extends Component<{
   attributes: Product["attributes"];
@@ -15,7 +15,7 @@ export default class ProductAttributes extends Component<{
       <div className="w-full">
         {attributes.map((attribute) => (
           <div key={attribute.id}>
-            <h2 className={`${inCart ? "text-sm" : "text-xl"} py-4`}>
+            <h2 className={`${inCart ? "text-sm py-2" : "text-xl py-4"}`}>
               {attribute.name}:{" "}
             </h2>
             <div className="flex gap-2">

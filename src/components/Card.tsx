@@ -2,7 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import cart from "../assets/Empty Cart_inverted_bg.svg";
 import { CartContext, CartContextType } from "../context/CartContext";
-import { Product } from "../context/ProductContext";
+import { Product } from "../types/product";
+import Image from "./Image";
 
 interface CardProps {
   product: Product;
@@ -30,7 +31,11 @@ class CardDetails extends React.Component<CardProps> {
         onClick={() => navigate(`/productDetails/${id}`)}
       >
         <div className="relative md:w-[360px] md:h-[330px] flex justify-center mx-auto p-2">
-          <img
+          <Image
+            width={360}
+            height={330}
+            isLazy
+            objectFit="contain"
             className="w-full h-full object-contain self-center"
             src={gallery[0].imageUrl}
             alt={name}
@@ -51,7 +56,7 @@ class CardDetails extends React.Component<CardProps> {
             }}
             disabled={!inStock}
           >
-            <img src={cart} alt="Quick Shop" className="w-[20px]" />
+            <Image width={20} height={20} src={cart} alt="Quick Shop" />
           </button>
         </div>
         <div className="px-6 py-4 bg-white">

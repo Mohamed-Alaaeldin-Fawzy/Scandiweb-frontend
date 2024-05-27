@@ -1,7 +1,6 @@
 import React from "react";
 import CartItem from "./CartItem";
 import { CartContext, CartContextType } from "../context/CartContext";
-import { ToastContext, ToastContextType } from "../context/ToasterContext";
 
 class Cart extends React.Component {
   static contextType = CartContext;
@@ -16,8 +15,8 @@ class Cart extends React.Component {
   };
 
   render() {
-    const { cartItems, addItemQuantity, removeItemQuantity, checkout, errors } =
-      this.context as CartContextType;
+    const { cartItems, addItemQuantity, removeItemQuantity, checkout } = this
+      .context as CartContextType;
 
     return (
       <div className="flex flex-col gap-4 p-4">
@@ -25,7 +24,7 @@ class Cart extends React.Component {
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
-          <div className="h-full w-full overflow-y-auto">
+          <div className="max-h-[400px] w-full overflow-y-auto">
             <h2 className="text-xl">
               <span className="font-bold">My Bag:</span> {cartItems.length}{" "}
               {cartItems.length === 1 ? "item" : "items"}
@@ -51,32 +50,14 @@ class Cart extends React.Component {
           <span>$ {this.getTotalPrice(cartItems)}</span>
         </p>
 
-        <ToastContext.Consumer>
-          {(toast: ToastContextType) => (
-            <button
-              className="bg-green-500 text-white px-4 py-2 rounded-lg w-full"
-              onClick={() => {
-                checkout();
-                if (errors.length > 0) {
-                  toast.addToast({
-                    id: "error",
-                    message: "Something went wrong",
-                    type: "error",
-                  });
-                }
-                if (errors.length === 0) {
-                  toast.addToast({
-                    id: "success",
-                    message: "Order placed successfully!",
-                    type: "success",
-                  });
-                }
-              }}
-            >
-              Checkout
-            </button>
-          )}
-        </ToastContext.Consumer>
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded-lg w-full"
+          onClick={() => {
+            checkout();
+          }}
+        >
+          Checkout
+        </button>
       </div>
     );
   }

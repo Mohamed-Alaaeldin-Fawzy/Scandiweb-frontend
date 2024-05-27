@@ -1,14 +1,27 @@
-import React, { Component } from "react";
+import React, { Component, ContextType } from "react";
 import Header from "./Header";
 import Overlay from "./Overlay";
-import ToastContainer from "./ToasterContainer";
+import CheckoutModal from "./CheckoutModal";
+import { CartContext } from "../context/CartContext";
 
 export default class Layout extends Component<{ children: React.ReactNode }> {
+  static contextType = CartContext;
+  declare context: ContextType<typeof CartContext>;
   render() {
+    const { errors, showCheckoutModal } = this.context;
     return (
       <>
-        <ToastContainer />
         <Header />
+        {showCheckoutModal && (
+          <CheckoutModal
+            isSuccess={errors.length === 0}
+            message={
+              errors.length > 0
+                ? "Something went wrong"
+                : "Your order has been placed, we will contact you"
+            }
+          />
+        )}
         <Overlay />
         <div className="py-20">{this.props.children}</div>
       </>
