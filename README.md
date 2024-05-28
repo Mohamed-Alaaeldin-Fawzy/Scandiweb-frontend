@@ -41,12 +41,12 @@ frontend/
 │   │   ├── ProductImage.tsx
 │   │   └── ProductViewer.tsx
 │   │   ├── Sidebar.tsx
-│   │   └── ToasterContainer.tsx
 │   ├── context/
 │   │   ├── CartContext.tsx
-│   │   ├── CategoryContext.tsx
-│   │   ├── ProductContext.tsx
-│   │   ├── ToasterContext.tsx
+│   │   ├── SelectedCategoryContext.tsx
+│   ├── pages/
+│   │   ├── Home.tsx
+│   │   ├── ProductDetails.tsx
 │   ├── graphql/
 │   │   ├── client.ts
 │   │   ├── mutation.ts
