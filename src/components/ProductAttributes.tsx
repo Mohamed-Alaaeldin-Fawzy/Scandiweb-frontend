@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Product } from "../types/product";
+import { parseToKebabCase } from "../utils/parseToKebabCase";
 
 export default class ProductAttributes extends Component<{
   attributes: Product["attributes"];
@@ -14,7 +15,12 @@ export default class ProductAttributes extends Component<{
     return (
       <div className="w-full">
         {attributes.map((attribute) => (
-          <div key={attribute.id}>
+          <div
+            key={attribute.id}
+            data-testid={
+              !inCart && `product-attribute-${parseToKebabCase(attribute.name)}`
+            }
+          >
             <h2 className={`${inCart ? "text-sm py-2" : "text-xl py-4"}`}>
               {attribute.name}:{" "}
             </h2>
@@ -22,6 +28,16 @@ export default class ProductAttributes extends Component<{
               {attribute.items.map((item) => (
                 <div
                   key={item.id}
+                  data-testid={
+                    inCart &&
+                    `cart-item-attribute-${parseToKebabCase(
+                      attribute.name
+                    )}-${parseToKebabCase(attribute.name)}${
+                      selectedAttributes[attribute.id] === item.id
+                        ? "-selected"
+                        : ""
+                    }`
+                  }
                   className={`flex items-center gap-2 border border-gray-300 rounded ${
                     onAttributeSelect && "cursor-pointer"
                   } ${

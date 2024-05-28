@@ -71,6 +71,11 @@ export default class Header extends Component<{}, HeaderState> {
           <div className="md:flex gap-x-6 h-full items-center hidden">
             {categories.map((category) => (
               <NavLink
+                data-testid={
+                  selectedCategory === category.name
+                    ? "active-category-link"
+                    : "category-link"
+                }
                 to={`/`}
                 className={`h-full flex items-center border-b-2 px-4 capitalize ${
                   selectedCategory === category.name
@@ -108,6 +113,7 @@ export default class Header extends Component<{}, HeaderState> {
             {({ cartItems, isCartOpened, toggleIsCartOpened }) => (
               <div className="relative flex h-full items-center">
                 <button
+                  data-testid="cart-btn"
                   className="cursor-pointer p-4"
                   onClick={toggleIsCartOpened}
                   aria-label="Toggle cart"

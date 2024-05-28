@@ -45,13 +45,17 @@ class Cart extends React.Component {
             ))}
           </div>
         )}
-        <p className="flex justify-between gap-4">
+        <p className="flex justify-between gap-4" data-testid="cart-total">
           <span>Total:</span>
           <span>$ {this.getTotalPrice(cartItems)}</span>
         </p>
 
         <button
-          className="bg-green-500 text-white px-4 py-2 rounded-lg w-full"
+          className={`${
+            cartItems.length === 0
+              ? "bg-gray-500 bg-opacity-50 cursor-not-allowed"
+              : "bg-green-500 cursor-pointer hover:bg-green-600 hover:shadow-xl"
+          } text-white px-4 py-2 rounded-lg w-full`}
           onClick={() => {
             checkout();
           }}

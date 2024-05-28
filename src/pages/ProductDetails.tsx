@@ -118,7 +118,10 @@ class ProductDetails extends Component<RouteProps, StateType> {
       <CartContext.Consumer>
         {(cart: CartContextType) => (
           <form className="container mx-auto py-8 flex flex-col lg:flex-row gap-10 justify-center">
-            <div className="flex flex-col-reverse gap-4 items-center md:flex-row">
+            <div
+              className="flex flex-col-reverse gap-4 items-center md:flex-row"
+              data-testid="product-gallery"
+            >
               <ProductImages
                 images={product.gallery.map((image) => image.imageUrl)}
                 onClick={(imageUrl) => this.setState({ imageUrl })}
@@ -148,6 +151,7 @@ class ProductDetails extends Component<RouteProps, StateType> {
                 </p>
               </div>
               <button
+                data-testid="add-to-cart"
                 className={`${
                   !this.state.isButtonDisabled
                     ? "bg-green-500"

@@ -46,6 +46,7 @@ class CartItem extends React.Component<CartItemProps> {
           <div className="flex flex-col justify-between h-[150px] w-[20px]">
             <button
               aria-label="Increase quantity"
+              data-testid="cart-item-amount-increase"
               className="bg-white hover:bg-gray-100 cursor-pointer w-5 h-5 justify-self-start"
               onClick={() => this.props.addItemQuantity(this.props.id)}
             >
@@ -57,9 +58,12 @@ class CartItem extends React.Component<CartItemProps> {
                 objectFit="cover"
               />
             </button>
-            <p className="text-center py-4">{quantity}</p>
+            <p className="text-center py-4" data-testid="cart-item-amount">
+              {quantity}
+            </p>
             <button
               aria-label="Decrease quantity"
+              data-testid="cart-item-amount-decrease"
               className="bg-white hover:bg-gray-100 cursor-pointer w-5 h-5 justify-self-end"
               onClick={() => this.props.removeItemQuantity(this.props.id)}
             >

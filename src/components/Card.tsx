@@ -4,6 +4,7 @@ import cart from "../assets/Empty Cart_inverted_bg.svg";
 import { CartContext, CartContextType } from "../context/CartContext";
 import { Product } from "../types/product";
 import Image from "./Image";
+import { parseToKebabCase } from "../utils/parseToKebabCase";
 
 interface CardProps {
   product: Product;
@@ -25,6 +26,7 @@ class CardDetails extends React.Component<CardProps> {
     const { name, inStock, gallery, prices, id } = product;
     return (
       <div
+        data-testid={`product-${parseToKebabCase(name)}`}
         className={`relative group rounded overflow-hidden hover:shadow-md flex flex-col p-4 max-w-md cursor-pointer ${
           !inStock && "opacity-50"
         }`}
@@ -44,7 +46,7 @@ class CardDetails extends React.Component<CardProps> {
             className={`hidden group-hover:block absolute -bottom-2 right-4 p-4 ${
               inStock
                 ? "bg-green-400 hover:bg-green-600 hover:shadow-2xl"
-                : "bg-gray-300"
+                : "hidden"
             } rounded-full`}
             onClick={(e) => {
               e.stopPropagation();

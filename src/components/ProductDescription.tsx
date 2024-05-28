@@ -43,7 +43,7 @@ class ProductDescription extends Component<{ description: string }> {
   render() {
     const { description } = this.props;
     return (
-      <div className="container">
+      <div className="container" data-testid="product-description">
         <ReadMore>{description}</ReadMore>
       </div>
     );
