@@ -56,6 +56,7 @@ class Cart extends React.Component {
               ? "bg-gray-500 bg-opacity-50 cursor-not-allowed"
               : "bg-green-500 cursor-pointer hover:bg-green-600 hover:shadow-xl"
           } text-white px-4 py-2 rounded-lg w-full`}
+          disabled={cartItems.length === 0}
           onClick={() => {
             checkout();
           }}

@@ -31,13 +31,7 @@ export default class Home extends Component<{}, ProductStateType> {
   render() {
     const { selectedCategory } = this.context;
     const { products, loading } = this.state;
-    const filteredProducts = products
-      ? products.filter((product) =>
-          selectedCategory === "all"
-            ? true
-            : selectedCategory === product.category.name
-        )
-      : [];
+
     return loading ? (
       <div className="container items-center h-screen flex justify-center mx-auto p-4">
         <Image
@@ -48,18 +42,24 @@ export default class Home extends Component<{}, ProductStateType> {
           alt="loading"
         />
       </div>
-    ) : filteredProducts.length > 0 ? (
-      <div className="relative w-screen p-4 md:p-2">
+    ) : products.length > 0 ? (
+      <div className="relative w-screen">
         <div className="container mx-auto py-8">
-          <h1 className="text-2xl md:text-3xl py-8 capitalize">
+          <h1 className="text-2xl md:text-3xl py-8 capitalize px-4">
             {selectedCategory}
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 place-items-center">
-            {filteredProducts.map((product) => (
-              <div key={product.id}>
-                <Card product={product} />
-              </div>
-            ))}
+            {products
+              .filter(
+                (product) =>
+                  product.category.name === selectedCategory ||
+                  selectedCategory === "all"
+              )
+              .map((product) => (
+                <div key={product.id}>
+                  <Card product={product} />
+                </div>
+              ))}
           </div>
         </div>
       </div>

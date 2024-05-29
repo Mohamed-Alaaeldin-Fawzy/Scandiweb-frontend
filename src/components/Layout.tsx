@@ -8,7 +8,7 @@ export default class Layout extends Component<{ children: React.ReactNode }> {
   static contextType = CartContext;
   declare context: ContextType<typeof CartContext>;
   render() {
-    const { errors, showCheckoutModal } = this.context;
+    const { errors, showCheckoutModal, setShowCheckoutModal } = this.context;
     return (
       <>
         <Header />
@@ -20,6 +20,7 @@ export default class Layout extends Component<{ children: React.ReactNode }> {
                 ? "Something went wrong"
                 : "Your order has been placed, we will contact you"
             }
+            handleClose={() => setShowCheckoutModal(false)}
           />
         )}
         <Overlay />

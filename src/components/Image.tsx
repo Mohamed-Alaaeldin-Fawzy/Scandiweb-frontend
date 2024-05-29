@@ -41,7 +41,6 @@ class Image extends Component<ImageProps> {
         loading={isLazy ? "lazy" : "eager"}
         alt={alt}
         className={imageStyles}
-        style={{ width: width, height: height }}
         onClick={onClick}
         {...rest}
       />

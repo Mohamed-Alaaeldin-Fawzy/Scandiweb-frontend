@@ -1,6 +1,7 @@
 import React from "react";
 import { Product } from "../types/product";
 import { createOrder } from "../graphql/mutation";
+import { compareObjects } from "../utils/compareObjects";
 
 export interface CartItem {
   product: Product;
@@ -21,6 +22,7 @@ export interface CartContextType {
   checkout: () => void;
   errors: string[];
   showCheckoutModal: boolean;
+  setShowCheckoutModal: (value: boolean) => void;
 }
 
 const storedCartItems = sessionStorage.getItem("cartItems");
@@ -42,6 +44,7 @@ const initialContextValue: CartContextType = {
   checkout: () => {},
   errors: [],
   showCheckoutModal: false,
+  setShowCheckoutModal: () => {},
 };
 
 const CartContext = React.createContext(initialContextValue);
@@ -108,23 +111,6 @@ class CartProvider extends React.Component<
     });
   };
 
-  compareObjects = (
-    obj1: { [key: string]: string },
-    obj2: { [key: string]: string }
-  ): boolean => {
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
-    if (keys1.length !== keys2.length) {
-      return false;
-    }
-    for (const key of keys1) {
-      if (obj1[key] !== obj2[key]) {
-        return false;
-      }
-    }
-    return true;
-  };
-
   addToCart = (
     product: Product,
     selectedAttributes: { [key: string]: string }
@@ -132,7 +118,7 @@ class CartProvider extends React.Component<
     const existingCartItem = this.state.cartItems.find(
       (item) =>
         item.product.id === product.id &&
-        this.compareObjects(item.selectedAttributes, selectedAttributes)
+        compareObjects(item.selectedAttributes, selectedAttributes)
     );
     if (existingCartItem) {
       this.addItemQuantity(product.id);
@@ -165,6 +151,12 @@ class CartProvider extends React.Component<
     sessionStorage.removeItem("cartItems");
   };
 
+  setShowCheckoutModal = (value: boolean): void => {
+    this.setState((prevState) => {
+      return { ...prevState, showCheckoutModal: value };
+    });
+  };
+
   render() {
     const { cartItems, isCartOpened } = this.state;
     const { children } = this.props;
@@ -181,6 +173,7 @@ class CartProvider extends React.Component<
           checkout: this.checkout,
           errors: this.state.errors,
           showCheckoutModal: this.state.showCheckoutModal,
+          setShowCheckoutModal: this.setShowCheckoutModal,
         }}
       >
         {children}

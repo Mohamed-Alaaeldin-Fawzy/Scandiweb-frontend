@@ -24,6 +24,15 @@ class CardDetails extends React.Component<CardProps> {
     const { addToCart } = this.context as CartContextType;
     const { product, navigate } = this.props;
     const { name, inStock, gallery, prices, id } = product;
+
+    const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      let defaultAttributes: { [key: string]: string } = {};
+      product.attributes.forEach((attribute) => {
+        defaultAttributes[attribute.id] = attribute.items[0].id;
+      });
+      addToCart(product, defaultAttributes);
+    };
     return (
       <div
         data-testid={`product-${parseToKebabCase(name)}`}
@@ -48,14 +57,7 @@ class CardDetails extends React.Component<CardProps> {
                 ? "bg-green-400 hover:bg-green-600 hover:shadow-2xl"
                 : "hidden"
             } rounded-full`}
-            onClick={(e) => {
-              e.stopPropagation();
-              let defaultAttributes: { [key: string]: string } = {};
-              product.attributes.forEach((attribute) => {
-                defaultAttributes[attribute.id] = attribute.items[0].id;
-              });
-              addToCart(product, defaultAttributes);
-            }}
+            onClick={handleAddToCart}
             disabled={!inStock}
           >
             <Image width={20} height={20} src={cart} alt="Quick Shop" />

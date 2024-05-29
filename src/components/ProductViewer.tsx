@@ -2,12 +2,14 @@ import { Component } from "react";
 import Chevron from "../assets/CaretLeft.svg";
 import Image from "./Image";
 
-export class ProductViewer extends Component<{
+interface ProductViewerProps {
   imageUrl: string;
   onNext: () => void;
   onPrev: () => void;
   showChevron: boolean;
-}> {
+}
+
+export class ProductViewer extends Component<ProductViewerProps> {
   render() {
     const { imageUrl, onNext, onPrev, showChevron } = this.props;
     return (

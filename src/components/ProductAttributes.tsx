@@ -2,12 +2,14 @@ import { Component } from "react";
 import { Product } from "../types/product";
 import { parseToKebabCase } from "../utils/parseToKebabCase";
 
-export default class ProductAttributes extends Component<{
+interface ProductAttributesProps {
   attributes: Product["attributes"];
   onAttributeSelect?: (attributeId: string, itemId: string) => void;
   selectedAttributes: { [key: string]: string };
   inCart?: boolean;
-}> {
+}
+
+export default class ProductAttributes extends Component<ProductAttributesProps> {
   render() {
     const { attributes, onAttributeSelect, selectedAttributes, inCart } =
       this.props;
@@ -18,7 +20,9 @@ export default class ProductAttributes extends Component<{
           <div
             key={attribute.id}
             data-testid={
-              !inCart && `product-attribute-${parseToKebabCase(attribute.name)}`
+              inCart
+                ? `product-attribute-${parseToKebabCase(attribute.name)}`
+                : `cart-item-attribute-${parseToKebabCase(attribute.name)}`
             }
           >
             <h2 className={`${inCart ? "text-sm py-2" : "text-xl py-4"}`}>
@@ -29,14 +33,15 @@ export default class ProductAttributes extends Component<{
                 <div
                   key={item.id}
                   data-testid={
-                    inCart &&
-                    `cart-item-attribute-${parseToKebabCase(
-                      attribute.name
-                    )}-${parseToKebabCase(attribute.name)}${
-                      selectedAttributes[attribute.id] === item.id
-                        ? "-selected"
-                        : ""
-                    }`
+                    inCart
+                      ? `cart-item-attribute-${parseToKebabCase(
+                          attribute.name
+                        )}-${parseToKebabCase(attribute.name)}${
+                          selectedAttributes[attribute.id] === item.id
+                            ? "-selected"
+                            : ""
+                        }`
+                      : ""
                   }
                   className={`flex items-center gap-2 border border-gray-300 rounded ${
                     onAttributeSelect && "cursor-pointer"

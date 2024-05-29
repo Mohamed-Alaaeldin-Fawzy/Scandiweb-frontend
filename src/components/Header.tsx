@@ -60,19 +60,21 @@ export default class Header extends Component<{}, HeaderState> {
     const { isOpened } = this.state;
     return isLoading ? null : (
       <nav className="h-20 bg-white fixed top-0 inset-x-0 z-30">
-        <div className="container mx-auto flex justify-between items-center h-full">
+        <div className="container mx-auto flex justify-between items-center h-full px-4">
           <button
             aria-label="Menu to open sidebar"
             onClick={this.toggleSidebar}
-            className="cursor-pointer bg-white w-8 md:hidden"
+            className="cursor-pointer bg-white w-8 md:hidden flex flex-1 justify-start items-center"
           >
             <Image width={24} height={24} src={menu} alt="menu" />
           </button>
-          <div className="md:flex gap-x-6 h-full items-center hidden">
+          <div className="md:flex  flex-1 justify-start gap-x-6 h-full items-center hidden">
             {categories.map((category) => (
               <NavLink
                 data-testid={
                   selectedCategory === category.name
+                    ? "active-category-link"
+                    : selectedCategory === "all"
                     ? "active-category-link"
                     : "category-link"
                 }
@@ -85,6 +87,7 @@ export default class Header extends Component<{}, HeaderState> {
                 key={category.id}
                 onClick={() => {
                   setSelectedCategory(category.name);
+                  console.log(selectedCategory);
                 }}
                 aria-label={`Category: ${category.name}`}
               >
@@ -100,7 +103,11 @@ export default class Header extends Component<{}, HeaderState> {
             selectedCategory={selectedCategory}
             isLoading={isLoading}
           />
-          <NavLink to={`/`} aria-label="Logo">
+          <NavLink
+            to={`/`}
+            aria-label="Logo"
+            className="flex flex-1 justify-center items-center"
+          >
             <Image
               width={50}
               height={50}
@@ -111,7 +118,7 @@ export default class Header extends Component<{}, HeaderState> {
           </NavLink>
           <CartContext.Consumer>
             {({ cartItems, isCartOpened, toggleIsCartOpened }) => (
-              <div className="relative flex h-full items-center">
+              <div className="relative h-full items-center flex flex-1 justify-end">
                 <button
                   data-testid="cart-btn"
                   className="cursor-pointer p-4"

@@ -7,6 +7,7 @@ interface SidebarProps {
   setSelectedCategory: (category: string) => void;
   selectedCategory: string;
 }
+
 export default class Sidebar extends Component<HeaderState & SidebarProps> {
   render() {
     const {

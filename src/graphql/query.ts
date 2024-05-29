@@ -8,7 +8,6 @@ export const fetchProducts = async () => {
         {
           products {
             id
-            description
             name
             prices {
               amount
@@ -19,6 +18,9 @@ export const fetchProducts = async () => {
             gallery {
               imageUrl: image_url
             }
+            category {
+              name
+            }
             attributes {
               id
               name
@@ -28,10 +30,6 @@ export const fetchProducts = async () => {
                 displayValue: display_value
                 value
               }
-            }
-            brand
-            category {
-              name
             }
           }
         }
